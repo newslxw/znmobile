@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">智能家电</string>
+    <string name="action_settings">设置</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_splash">智能家电</string>
+    <string name="tmpDevName">智能设备</string>
+    <string name="menu_link">一键连接</string>
+    <string name="label_password">密码:</string>
+    <string name="label_show_password">显示密码</string>
+    <string name="label_device_count">数目:</string>
+    <string name="label_device_count_single">单个</string>
+    <string name="label_device_count_multiple">多个</string>
+    <string name="btn_connect">连接</string>
+    <string name="tip_timeout">配置设备超时,请检查设备指示灯和设置密码是否正确</string>
+    <string name="tip_wifi_not_connected">wifi网络未连接，请先连接!</string>
+    <string name="tip_configuring_device">正在配置设备</string>
+    <string name="tip_device_config_success">设备MAC:%s配置成功</string>
+    <string name="title_activity_zndev_config">一键连接</string>
+    <string name="title_activity_cha_zuo">智能插座</string>
+    <string name="title_activity_xie_lou">智能防漏气开关</string>
+    <string name="title_activity_rev_map">位置显示</string>
+
+</resources>

@@ -1,0 +1,230 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp" >
+
+
+    <TextView
+        android:id="@+id/labInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="广州市德斐尔电子科技有限公司"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#cccccc" >
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:background="#ffffff"
+            android:paddingTop="5dp" >
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="更新时间："
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/tvUpdTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2014-04-13 12:34:37"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <ImageView
+                android:id="@+id/imageButton1"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:src="@drawable/blank" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+        	android:background="#ffffff"
+        	android:layout_marginTop="1dp"
+            android:paddingTop="5dp" 
+            android:layout_width="wrap_content">
+
+            <TextView
+                android:id="@+id/TextView01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="温度："
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/tvWD"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:src="@drawable/blank" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow5"
+            android:paddingTop="5dp" 
+        	android:background="#ffffff"
+        	android:layout_marginTop="1dp"
+            android:layout_width="wrap_content">
+
+            <TextView
+                android:id="@+id/TextView10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="湿度："
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            
+            <TextView
+                android:id="@+id/tvSD"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:src="@drawable/blank" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:paddingTop="5dp" 
+        	android:background="#ffffff"
+        	android:layout_marginTop="1dp"
+            android:layout_width="wrap_content" >
+
+            <TextView
+                android:id="@+id/TextView06"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="氧气："
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            
+            <TextView
+                android:id="@+id/tvYQ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:src="@drawable/blank" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:paddingTop="5dp" 
+        	android:background="#ffffff"
+        	android:layout_marginTop="1dp" >
+
+            <TextView
+                android:id="@+id/TextView04"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="空气："
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            
+            <TextView
+                android:id="@+id/tvKQ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:src="@drawable/blank" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow4"
+            android:paddingTop="5dp" 
+        	android:background="#ffffff"
+        	android:layout_marginTop="1dp"
+            android:layout_width="wrap_content" >
+
+            <TextView
+                android:id="@+id/TextView08"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="甲醛："
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            
+            <TextView
+                android:id="@+id/tvJQ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:src="@drawable/blank" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:paddingTop="5dp" 
+        	android:background="#ffffff"
+        	android:layout_marginTop="1dp"
+        	android:layout_marginBottom="1dp">
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="位置："
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/tvMapWZ"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:lines="3"
+                        android:maxLines="10"
+                        android:scrollbars="vertical"
+                        android:singleLine="false"
+                        android:text="无位置信息"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <ImageView
+                    android:id="@+id/ibWZ"
+                    android:layout_width="32dp"
+                    android:layout_height="34dp"
+                    android:src="@drawable/icon_en" />
+
+        </TableRow>
+        </TableLayout>
+    </ScrollView>
+
+</RelativeLayout>

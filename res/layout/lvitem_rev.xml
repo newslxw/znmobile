@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal" >
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="62dp"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical|left"
+        android:shrinkColumns="2"
+        android:stretchColumns="1,2" >
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|left" >
+
+            <TextView
+                android:id="@+id/revItemName"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:minWidth="100dp"
+                android:text="Large Text"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/revItemValue"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Large Text"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/revItemDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Large Text"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>
