@@ -17,6 +17,8 @@ import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
+import com.baidu.mapapi.utils.CoordinateConverter;
+import com.baidu.mapapi.utils.CoordinateConverter.CoordType;
 import com.wlnet.mobile.R;
 import com.wlnet.mobile.dao.DevDao;
 import com.wlnet.mobile.dao.RevDao;
@@ -26,6 +28,7 @@ import com.wlnet.mobile.pojo.Dev;
 import com.wlnet.mobile.pojo.Rev;
 import com.wlnet.mobile.ui.DevActivity.Refresh;
 import com.wlnet.mobile.utils.DateUtil;
+import com.wlnet.mobile.utils.GpsUtils;
 
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -62,6 +65,7 @@ public class RevActivity extends Activity implements  OnGetGeoCoderResultListene
 	protected CountDownLatch countDownLatch;
 	protected LocationApplication myApplication ;
 	private LatLng point ;//= new LatLng(23.1200490000,113.3076500000);
+	private LatLng gpsPoint;
 	protected GeoCoder mSearch;
     public synchronized boolean isbPause() {
 		return bPause;
@@ -143,12 +147,17 @@ public class RevActivity extends Activity implements  OnGetGeoCoderResultListene
 		}
 		this.tvKQ.setText(kq);
 		if(arr.length>6){
-			if(null != point){
-				LatLng point2 = new LatLng(Double.parseDouble(arr[5]), Double.parseDouble(arr[6]));
-				if(!point.equals(point2))mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(point));
-				point = point2;
+			if(null != gpsPoint){
+				LatLng point2 = GpsUtils.gpsPointToMap(arr[5], arr[6]);//new LatLng(Double.parseDouble(arr[5]), Double.parseDouble(arr[6]));
+				if(!gpsPoint.equals(point2)){
+					// 将GPS设备采集的原始GPS坐标转换成百度坐标  
+					gpsPoint = point2;
+					point = GpsUtils.gpsPointToBaiduMap(gpsPoint);
+					mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(point));
+				}
 			}else{
-				point = new LatLng(Double.parseDouble(arr[5]), Double.parseDouble(arr[6]));
+				gpsPoint = GpsUtils.gpsPointToMap(arr[5], arr[6]);//new LatLng(Double.parseDouble(arr[5]), Double.parseDouble(arr[6]));
+				point = GpsUtils.gpsPointToBaiduMap(gpsPoint);
 				mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(point));	
 			}
 			
