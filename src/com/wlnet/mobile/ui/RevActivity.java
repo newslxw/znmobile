@@ -38,6 +38,7 @@ import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -66,7 +67,9 @@ public class RevActivity extends Activity implements  OnGetGeoCoderResultListene
 	protected LocationApplication myApplication ;
 	private LatLng point ;//= new LatLng(23.1200490000,113.3076500000);
 	private LatLng gpsPoint;
-	protected GeoCoder mSearch;
+	private String tipNoWz;
+	private String curWZ;
+//	protected GeoCoder mSearch;
     public synchronized boolean isbPause() {
 		return bPause;
 	}
@@ -74,11 +77,23 @@ public class RevActivity extends Activity implements  OnGetGeoCoderResultListene
 	public synchronized void setbPause(boolean bPause) {
 		this.bPause = bPause;
 	}
+	
+	
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		/*double latitude = data.getDoubleExtra("latitude", 0);
+		double longitude = data.getDoubleExtra("longitude", 0);
+		Log.e("onActivityResult", latitude+":"+longitude);
+		point = new LatLng(latitude, longitude);*/
+	}
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rev);
+	    myApplication = (LocationApplication)getApplicationContext();
 		bundle = getIntent().getExtras();
 		devUuid = bundle.getString("DevUuid");
 		queryRev = new Rev();
@@ -103,22 +118,19 @@ public class RevActivity extends Activity implements  OnGetGeoCoderResultListene
 		ibWZ.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
-					showMap(point);	
+				showMap(point);	
 			}
 			
 		});
 		tvWZ.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
-			 showMap(point);				
+				showMap(point);				
 			}
 			
 		});
-		mSearch =  GeoCoder.newInstance();
 		// 初始化搜索模块，注册事件监听
-		mSearch.setOnGetGeoCodeResultListener(this);
-		
-		updateView(curRev);
+		this.tipNoWz = this.getString(R.string.tip_nowz);
     }
 	
 	private void updateView(Rev rev){
@@ -153,12 +165,13 @@ public class RevActivity extends Activity implements  OnGetGeoCoderResultListene
 					// 将GPS设备采集的原始GPS坐标转换成百度坐标  
 					gpsPoint = point2;
 					point = GpsUtils.gpsPointToBaiduMap(gpsPoint);
-					mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(point));
+					myApplication.getmSearch().reverseGeoCode(new ReverseGeoCodeOption().location(point));
+					if(this.tipNoWz.equals(tvWZ.getText()))tvWZ.setText(R.string.tip_queryingwz);
 				}
 			}else{
 				gpsPoint = GpsUtils.gpsPointToMap(arr[5], arr[6]);//new LatLng(Double.parseDouble(arr[5]), Double.parseDouble(arr[6]));
 				point = GpsUtils.gpsPointToBaiduMap(gpsPoint);
-				mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(point));	
+				myApplication.getmSearch().reverseGeoCode(new ReverseGeoCodeOption().location(point));	
 			}
 			
 			//this.tvWZ.setText("正在计算...");
@@ -177,11 +190,11 @@ public class RevActivity extends Activity implements  OnGetGeoCoderResultListene
 		bundle.putString("DevUuid", devUuid);
 		Intent revIntent = new Intent(RevActivity.this,RevMapActivity.class); 
 		revIntent.putExtras(bundle);
-		startActivity(revIntent);
+		startActivityForResult(revIntent, 0);
 	}
 
 	protected void onDestroy() {
-		mSearch.destroy();
+		//myApplication.getmSearch().destroy();
 		super.onDestroy();
 	}
 
@@ -190,9 +203,10 @@ public class RevActivity extends Activity implements  OnGetGeoCoderResultListene
 		super.onResume();
 		this.setbPause(false);
 		countDownLatch = new CountDownLatch(1);
-		super.onStart();
+		myApplication.getmSearch().setOnGetGeoCodeResultListener(this);
 		revThread = new Thread(refreshHandle);
 		revThread.start();
+		if(curRev!=null)updateView(curRev);
 	}
 
 	@Override
@@ -315,11 +329,15 @@ public class RevActivity extends Activity implements  OnGetGeoCoderResultListene
 
 	@Override
 	public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
+		if(null == tvWZ) return;
 		if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
 			Toast.makeText(RevActivity.this, "抱歉，未能找到结果", Toast.LENGTH_LONG)
 					.show();
-			tvWZ.setText("未能找到结果");
+			curWZ = null;
+			tvWZ.setText(R.string.tip_nowz);
 		}else{
+			curWZ = result.getAddress();
+			Log.e("RevActivity.search", "search wz:"+curWZ +":"+ tvWZ.getText());
 			if(!tvWZ.getText().equals(result.getAddress())){
 				tvWZ.setText(result.getAddress());
 				Toast.makeText(RevActivity.this, result.getAddress(),
