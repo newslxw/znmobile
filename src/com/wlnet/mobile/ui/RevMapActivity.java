@@ -54,6 +54,10 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -80,11 +84,17 @@ public class RevMapActivity extends Activity implements  OnGetGeoCoderResultList
 	private LocationApplication myApplication;
 	private LocationClientOption locOption;
 	private BitmapDescriptor mCurrentMarker;
+	private ImageButton btnShowLine;
 	boolean isFirstLoc = true;// 是否首次定位
-	protected GeoCoder mSearch;
+	//protected GeoCoder mSearch;
 	private PoiSearch mPoiSearch ;
 	private ArrayList<LatLng> oldPoints = new ArrayList<LatLng>();
-	private int maxPoint = 20;
+	private int maxPoint = 200;
+	private String curWZ ;
+	private boolean bShowLine = false;
+	private PolylineOptions polyine;
+	private Overlay polyineOverlay;
+	private Overlay markerOverlay;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -110,9 +120,19 @@ public class RevMapActivity extends Activity implements  OnGetGeoCoderResultList
 		
 		mMapView = (MapView) findViewById(R.id.bmapView); 
 		tvMapWZ = (TextView) findViewById(R.id.tvMapWZ);  
+		btnShowLine = (ImageButton)findViewById(R.id.btnshowline);  
+		btnShowLine.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View arg0) {
+				bShowLine = !bShowLine;
+				btnShowLine.setBackgroundResource(bShowLine?R.drawable.btn_guiji_hide:R.drawable.btn_guiji);
+				toggleGuiJi();
+			}
+			
+		});
         mBaiduMap = mMapView.getMap();  
         mMapView.removeViewAt(1);
-        mCurrentMarker = BitmapDescriptorFactory.fromResource(R.drawable.icon_en); 
+        mCurrentMarker = BitmapDescriptorFactory.fromResource(R.drawable.icon_geo_blue); 
 	    //普通地图  
 	    mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);  
 	    mBaiduMap.setMyLocationEnabled(true);
@@ -122,9 +142,8 @@ public class RevMapActivity extends Activity implements  OnGetGeoCoderResultList
 		locOption.setOpenGps(true);// 打开gps
 		locOption.setCoorType("bd09ll"); // 设置坐标类型
 		//myApplication.startLoc(locListener, locOption);
-		mSearch =  GeoCoder.newInstance();
 		// 初始化搜索模块，注册事件监听
-		mSearch.setOnGetGeoCodeResultListener(this);
+		myApplication.getmSearch().setOnGetGeoCodeResultListener(this);
 		
 		mPoiSearch = PoiSearch.newInstance();
 		mPoiSearch.setOnGetPoiSearchResultListener(poiListener);
@@ -137,21 +156,30 @@ public class RevMapActivity extends Activity implements  OnGetGeoCoderResultList
 	}
 
 	public void updateEndPos(LatLng point){
-		if(point == null) return;
+		if(point == null || mBaiduMap == null ) return;
 		if(curPoint!=null&&curPoint.latitude == point.latitude && curPoint.longitude == point.longitude) return;
 		curPoint = point;
 		mBaiduMap.clear();  
-		mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(point));
-		OverlayOptions option = new MarkerOptions().position(point).icon(mCurrentMarker);  
-		Overlay overlay = mBaiduMap.addOverlay(option);
+		myApplication.getmSearch().reverseGeoCode(new ReverseGeoCodeOption().location(point));
+		
+		OverlayOptions option = new MarkerOptions().position(point).icon(mCurrentMarker).anchor(0.5f, 0.5f);  
+		
+		markerOverlay = mBaiduMap.addOverlay(option);
 		oldPoints.add(point);
 		if(oldPoints.size() > maxPoint) oldPoints.remove(0);
 		if(oldPoints.size()>2){
-			PolylineOptions polylineOption = new PolylineOptions().points(oldPoints)
-				    .color(0xFF000000);  
-					mBaiduMap.addOverlay(polylineOption);
+			polyine = new PolylineOptions().points(oldPoints)
+				    .color(0xFF00FF00).width(10);  
+			polyineOverlay = mBaiduMap.addOverlay(polyine);
+			polyineOverlay.setVisible(bShowLine);
 		}
 		
+	}
+	
+	private void toggleGuiJi(){
+		if(polyineOverlay != null){
+			polyineOverlay.setVisible(bShowLine);
+		}
 	}
 	
 
@@ -254,7 +282,7 @@ public class RevMapActivity extends Activity implements  OnGetGeoCoderResultList
 	public void updateMapCenter(LatLng cenpt, LocationMode mode){
 		MapStatus mMapStatus = new MapStatus.Builder()
 	    .target(cenpt)
-	    .zoom(18)
+	    .zoom(16)
 	    .build();
 	    //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
 	    MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
@@ -290,6 +318,19 @@ public class RevMapActivity extends Activity implements  OnGetGeoCoderResultList
 	
 	
 	
+	
+	
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		/*if(keyCode == KeyEvent.KEYCODE_BACK){
+			this.getIntent().putExtra("latitude", curPoint.latitude);
+			this.getIntent().putExtra("longitude", curPoint.longitude);
+			this.setResult(0, this.getIntent());
+		}*/
+		return super.onKeyDown(keyCode, event);
+	}
+
 	@Override  
     protected void onDestroy() {  
 		// 退出时销毁定位
@@ -298,7 +339,8 @@ public class RevMapActivity extends Activity implements  OnGetGeoCoderResultList
 		mBaiduMap.setMyLocationEnabled(false);
 		mMapView.onDestroy();
 		mMapView = null;
-		mSearch.destroy();
+		mBaiduMap = null;
+		//mSearch.destroy();
 		mPoiSearch.destroy();
         super.onDestroy();  
     }  
@@ -307,7 +349,7 @@ public class RevMapActivity extends Activity implements  OnGetGeoCoderResultList
 		super.onResume();
 		this.setbPause(false);
 		countDownLatch = new CountDownLatch(1);
-		super.onStart();
+		//super.onStart();
 		revThread = new Thread(refreshHandle);
 		revThread.start();
         mMapView.onResume();  
@@ -345,7 +387,9 @@ public class RevMapActivity extends Activity implements  OnGetGeoCoderResultList
 			/*Toast.makeText(RevMapActivity.this, "抱歉，未能找到结果", Toast.LENGTH_LONG)
 					.show();*/
 			tvMapWZ.setText("未能找到地名");
+			curWZ = null;
 		}else{
+			curWZ = result.getAddress();
 			if(!tvMapWZ.getText().equals(result.getAddress())){
 				tvMapWZ.setText(result.getAddress());
 				/*Toast.makeText(RevMapActivity.this, result.getAddress(),

@@ -6,6 +6,7 @@ import com.baidu.location.GeofenceClient;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
+import com.baidu.mapapi.search.geocode.GeoCoder;
 
 import android.app.Application;
 import android.app.Service;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 public class LocationApplication extends Application {
 	public LocationClient mLocationClient;
 	public GeofenceClient mGeofenceClient;
+	protected GeoCoder mSearch;
 	//public MyLocationListener mMyLocationListener;
 	
 	public Vibrator mVibrator; //android Υπ¶―
@@ -76,8 +78,18 @@ public class LocationApplication extends Application {
 		//mMyLocationListener = new MyLocationListener();
 		//mLocationClient.registerLocationListener(mMyLocationListener);
 		mGeofenceClient = new GeofenceClient(this);
-				
+		mSearch =  GeoCoder.newInstance();		
 		mVibrator =(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
+	}
+
+
+	public GeoCoder getmSearch() {
+		return mSearch;
+	}
+
+
+	public void setmSearch(GeoCoder mSearch) {
+		this.mSearch = mSearch;
 	}
 
 	/*
