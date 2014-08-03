@@ -98,7 +98,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppBaseTheme" >
-        <!--debug: o1DnmkGrPEpgc7QvWIKlbjbS    publish:wdzQL4KGOj0TaLgQYhF4ULMW-->
+        <!--debug: o1DnmkGrPEpgc7QvWIKlbjbS    publish: wdzQL4KGOj0TaLgQYhF4ULMW-->
         
 <meta-data
             android:name="com.baidu.lbsapi.API_KEY"

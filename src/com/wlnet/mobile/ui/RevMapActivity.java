@@ -46,6 +46,7 @@ import com.wlnet.mobile.R;
 import com.wlnet.mobile.dao.RevDao;
 import com.wlnet.mobile.net.TcpReceive;
 import com.wlnet.mobile.pojo.Rev;
+import com.wlnet.mobile.utils.GpsUtils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -159,7 +160,7 @@ public class RevMapActivity extends Activity implements  OnGetGeoCoderResultList
 		if(value==null)value="";
 		String arr[] = value.split(",");
 		if(arr.length>6){
-			LatLng point2 = new LatLng(Double.parseDouble(arr[5]), Double.parseDouble(arr[6]));
+			LatLng point2 = GpsUtils.gpsPointToBaiduMap(arr[5], arr[6]);
 			return point2;
 		}
 		return null;
